@@ -83,6 +83,11 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-bus-amqp</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.google.cloud.tools</groupId>
+			<artifactId>jib-maven-plugin</artifactId>
+			<version>3.4.2</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -130,7 +135,7 @@
 			<plugin>
 				<groupId>com.google.cloud.tools</groupId>
 				<artifactId>jib-maven-plugin</artifactId>
-				<version>3.4.4</version>
+				<version>3.4.2</version>
 				<configuration>
 					<to>
 						<image>fdln/${project.artifactId}:s6</image>
