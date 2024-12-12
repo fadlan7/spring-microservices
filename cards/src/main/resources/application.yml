@@ -1,83 +1,3 @@
-#server:
-#  port: 8090
-#spring:
-#  application:
-#    name: "cards"
-#  profiles:
-#    active: "prod"
-#  datasource:
-#    url: jdbc:mysql://localhost:3307/cardsdb
-#    username: root
-#    password: root
-#  jpa:
-#    show-sql: true
-#  sql:
-#    init:
-#      mode: always
-#  config:
-#    import: "optional:configserver:http://localhost:8071/"
-##  rabbitmq:
-##    host: "localhost"
-##    port: 5672
-##    username: "guest"
-##    password: "guest"
-#
-#
-#management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include: "*"
-##  health:
-##    readiness-state:
-##      enabled: true
-##    liveness-state:
-##      enabled: true
-#  endpoint:
-#    shutdown:
-#      enabled: true
-##    health:
-##      probes:
-##        enabled: true
-#  info:
-#    env:
-#      enabled: true
-#
-#endpoints:
-#  shutdown:
-#    enabled: true
-#
-#eureka:
-#  instance:
-#    prefer-ip-address: true
-#  client:
-#    fetchRegistry: true
-#    registerWithEureka: true
-#    serviceUrl:
-#      defaultZone: http://localhost:8070/eureka/
-#
-#info:
-#  app:
-#    name: "cards"
-#    description: "Eazybank cards API"
-#    version: "1.0.0"
-#
-#logging:
-#  level:
-#    com:
-#      microservice:
-#        cards: DEBUG
-#
-## Konfigurasi Health Check untuk Database dan Aplikasi
-##health:
-##  mysql:
-##    enabled: true
-##  readiness:
-##    enabled: true
-##  liveness:
-##    enabled: true
-
-
 server:
   port: 8090
 
@@ -87,7 +7,7 @@ spring:
   profiles:
     active: "prod"
   datasource:
-    url: jdbc:mysql://cardsdb:3306/cardsdb
+    url: jdbc:mysql://localhost:3307/cardsdb
     username: root
     password: root
   jpa:
@@ -96,7 +16,12 @@ spring:
     init:
       mode: always
   config:
-    import: "optional:configserver:http://configserver:8071/"
+    import: "optional:configserver:http://localhost:8071/"
+#  rabbitmq:
+#    host: "localhost"
+#    port: 5672
+#    username: "guest"
+#    password: "guest"
 
 management:
   endpoints:
@@ -129,12 +54,12 @@ eureka:
     fetchRegistry: true
     registerWithEureka: true
     serviceUrl:
-      defaultZone: http://eurekaserver:8070/eureka/
+      defaultZone: http://localhost:8070/eureka/
 
 info:
   app:
-    name: "cards"
-    description: "Eazybank cards API"
+    name: "loans"
+    description: "Eazybank loans API"
     version: "1.0.0"
 
 logging:
@@ -142,3 +67,76 @@ logging:
     com:
       microservice:
         accounts: DEBUG
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      permittedNumberOfCallsInHalfOpenState: 2
+      failureRateThreshold: 50
+      waitDurationInOpenState: 1000
+
+#server:
+#  port: 8090
+#
+#spring:
+#  application:
+#    name: "cards"
+#  profiles:
+#    active: "prod"
+#  datasource:
+#    url: jdbc:mysql://localhost:3307/cardsdb
+#    username: root
+#    password: root
+#  jpa:
+#    show-sql: true
+#  sql:
+#    init:
+#      mode: always
+#  config:
+#    import: "optional:configserver:http://configserver:8071/"
+#
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#  health:
+#    readiness-state:
+#      enabled: true
+#    liveness-state:
+#      enabled: true
+#  endpoint:
+#    shutdown:
+#      enabled: true
+#    health:
+#      probes:
+#        enabled: true
+#  info:
+#    env:
+#      enabled: true
+#
+#endpoints:
+#  shutdown:
+#    enabled: true
+#
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#  client:
+#    fetchRegistry: true
+#    registerWithEureka: true
+#    serviceUrl:
+#      defaultZone: http://eurekaserver:8070/eureka/
+#
+#info:
+#  app:
+#    name: "cards"
+#    description: "Eazybank cards API"
+#    version: "1.0.0"
+#
+#logging:
+#  level:
+#    com:
+#      microservice:
+#        accounts: DEBUG
