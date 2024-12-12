@@ -72,9 +72,9 @@ resilience4j.circuitbreaker:
   configs:
     default:
       slidingWindowSize: 10
-      permittedNumberOfcallsInHalfOpenState: 2
-      failureRateThreshiold: 50
-      wiatDurationInOpenState: 1000
+      permittedNumberOfCallsInHalfOpenState: 2
+      failureRateThreshold: 50
+      waitDurationInOpenState: 1000
 
 
 
