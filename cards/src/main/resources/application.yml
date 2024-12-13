@@ -5,7 +5,7 @@ spring:
   application:
     name: "cards"
   profiles:
-    active: "prod"
+    active: "default"
   datasource:
     url: jdbc:mysql://localhost:3307/cardsdb
     username: root
@@ -42,6 +42,9 @@ management:
   info:
     env:
       enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 endpoints:
   shutdown:
@@ -58,8 +61,8 @@ eureka:
 
 info:
   app:
-    name: "loans"
-    description: "Eazybank loans API"
+    name: "cards"
+    description: "Eazybank cards API"
     version: "1.0.0"
 
 logging:
@@ -67,6 +70,8 @@ logging:
     com:
       microservice:
         accounts: DEBUG
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
 
 resilience4j.circuitbreaker:
   configs:

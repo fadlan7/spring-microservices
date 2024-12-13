@@ -17,19 +17,42 @@ public class ResponseTraceFilter {
     @Autowired
     FilterUtility filterUtility;
 
+//    @Bean
+//    public GlobalFilter postGlobalFilter() {
+//        return (exchange, chain) -> {
+//            return chain.filter(exchange).then(Mono.fromRunnable(() -> {
+//                HttpHeaders requestHeaders = exchange.getRequest().getHeaders();
+//                String correlationId = filterUtility.getCorrelationId(requestHeaders);
+//
+//                if(!(exchange.getResponse().getHeaders().containsKey(filterUtility.CORRELATION_ID))) {
+//                    logger.debug("Updated the correlation id to the outbound headers: {}", correlationId);
+//                    exchange.getResponse().getHeaders().add(filterUtility.CORRELATION_ID, correlationId);
+//                }
+//
+//            }));
+//        };
+//    }
+
     @Bean
     public GlobalFilter postGlobalFilter() {
         return (exchange, chain) -> {
             return chain.filter(exchange).then(Mono.fromRunnable(() -> {
                 HttpHeaders requestHeaders = exchange.getRequest().getHeaders();
-                String correlationId = filterUtility.getCorrelationId(requestHeaders);
+                String correlationId = filterUtility != null
+                        ? filterUtility.getCorrelationId(requestHeaders)
+                        : "default-correlation-id";
 
-                if(!(exchange.getResponse().getHeaders().containsKey(filterUtility.CORRELATION_ID))) {
+                if (correlationId == null || correlationId.isEmpty()) {
+                    logger.warn("Correlation ID not found, using default.");
+                    correlationId = "default-correlation-id";
+                }
+
+                if (!exchange.getResponse().getHeaders().containsKey(filterUtility.CORRELATION_ID)) {
                     logger.debug("Updated the correlation id to the outbound headers: {}", correlationId);
                     exchange.getResponse().getHeaders().add(filterUtility.CORRELATION_ID, correlationId);
                 }
-
             }));
         };
     }
+
 }

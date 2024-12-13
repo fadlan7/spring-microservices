@@ -70,9 +70,18 @@ public class GatewayserverApplication {
         return new RedisRateLimiter(1, 1, 1);
     }
 
+//    @Bean
+//    KeyResolver userKeyResolver() {
+//        return exchange -> Mono.just(exchange.getRequest().getHeaders()
+//                .getFirst("user")).defaultIfEmpty("anonymous");
+//    }
+
     @Bean
     KeyResolver userKeyResolver() {
-        return exchange -> Mono.just(exchange.getRequest().getHeaders()
-                .getFirst("user")).defaultIfEmpty("anonymous");
+        return exchange -> {
+            String userHeader = exchange.getRequest().getHeaders().getFirst("user");
+            return Mono.just(userHeader != null ? userHeader : "anonymous");
+        };
     }
+
 }
